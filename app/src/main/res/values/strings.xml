@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Uber Clone</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
+    <string name="MAPS_API_KEY">AIzaSyD29RUyFGEAda9lM7vyX-MdVvh0FiorSPA</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoieWF0aW4wNyIsImEiOiJjbDRubW5qNm4xZWhoM2hueGJhajJlaXo5In0.blyGtW4dGGbT8dPZ8C1Q1A</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

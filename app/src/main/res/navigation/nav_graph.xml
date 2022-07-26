@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/selectDestinationFragment">
+
+    <fragment
+        android:id="@+id/selectDestinationFragment"
+        android:name="com.example.basicfirebase.SelectDestinationFragment"
+        android:label="fragment_select_destination"
+        tools:layout="@layout/fragment_select_destination" >
+        <action
+            android:id="@+id/action_selectDestinationFragment_to_rideOptionsFragment"
+            app:destination="@id/rideOptionsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_in_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/rideOptionsFragment"
+        android:name="com.example.basicfirebase.RideOptionsFragment"
+        android:label="fragment_ride_options"
+        tools:layout="@layout/fragment_ride_options" >
+        <action
+            android:id="@+id/action_rideOptionsFragment_to_selectDestinationFragment"
+            app:destination="@id/selectDestinationFragment"
+            app:enterAnim="@anim/slide_in_left" />
+    </fragment>
+</navigation>
