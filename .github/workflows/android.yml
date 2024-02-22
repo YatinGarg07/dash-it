@@ -18,6 +18,8 @@ jobs:
       run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties  
     - name: Build Release APK
       run: ./gradlew assembleRelease
+    - name: Build Release bundle
+      run: ./gradlew bundleRelease  
     - name: Upload Release Build to Artifacts
       uses: actions/upload-artifact@v3
       with:
