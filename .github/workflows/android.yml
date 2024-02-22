@@ -19,6 +19,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Get local.properties from secrets
         run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
       - name: Build Release APK
         run: ./gradlew assembleRelease
       - name: Build Release bundle
@@ -37,6 +39,7 @@ jobs:
           generate_release_notes: true
           prerelease: true
           files: |
+            app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/apk/release/app-release-unsigned.apk
             app/build/outputs/bundle/release/app-release.aab
         env:
