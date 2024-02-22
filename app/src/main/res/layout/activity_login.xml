@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="350dp"
         android:scaleType="fitXY"
-        android:src="@drawable/login_banner"
+        android:src="@drawable/dddash_it"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

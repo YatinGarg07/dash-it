@@ -105,6 +105,10 @@ class RideOptionsFragment : Fragment() , OnRideSelect {
             //binding.rideButton.visibility = GONE
         }
 
+        binding.rideButton.setOnClickListener {
+            listener.StripePaymentForm()
+        }
+
 
 
     }
@@ -127,10 +131,9 @@ class RideOptionsFragment : Fragment() , OnRideSelect {
 
     private fun makeAdapter(duration : String){
         data = ArrayList()
-        data.add(RideOptionData("https://links.papareact.com/3pn","Uber X", duration, 1.0F))
-        data.add(RideOptionData("https://links.papareact.com/5w8","Uber XL", duration, 1.2F))
-        data.add(RideOptionData("https://links.papareact.com/7pf","Uber LUX", duration, 1.75F))
-
+        data.add(RideOptionData("https://links.papareact.com/3pn","Dash X", duration, 1.0F))
+        data.add(RideOptionData("https://links.papareact.com/5w8","Dash XL", duration, 1.2F))
+        data.add(RideOptionData("https://links.papareact.com/7pf","Dash LUX", duration, 1.75F))
 
          customAdapter = RidesAdapter(data,this.context!!,this)
     }
@@ -149,10 +152,12 @@ class RideOptionsFragment : Fragment() , OnRideSelect {
 
     interface OnCallBackRecieved{
         fun backToSelectDestinationFragment(isPopFromBackStack : Boolean)
+        fun StripePaymentForm()
     }
 
-    override fun rideSelectedCallback(rideName: String) {
-        viewModel.updateRideName(rideName)
+
+    override fun rideSelectedCallback(rideName: String, bill: Int) {
+        viewModel.updateRideDetails(rideName,bill)
     }
 
 }

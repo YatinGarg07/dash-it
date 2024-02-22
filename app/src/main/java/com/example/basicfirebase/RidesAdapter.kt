@@ -20,7 +20,10 @@ class RidesAdapter(list : ArrayList<RideOptionData>,private val context : Contex
         //click listener
         binding.rideLinearLayout.setOnClickListener {
             Log.d(TAG,"Item Clicked")
-            listener.rideSelectedCallback(localList[viewHolder.bindingAdapterPosition].rideTitle)
+            listener.rideSelectedCallback(
+                localList[viewHolder.bindingAdapterPosition].rideTitle,
+                localList[viewHolder.bindingAdapterPosition].ridePrice
+                )
         }
         return viewHolder
     }
@@ -56,6 +59,6 @@ class RidesAdapter(list : ArrayList<RideOptionData>,private val context : Contex
 }
 
 public interface OnRideSelect {
-    fun rideSelectedCallback(rideName : String)
+    fun rideSelectedCallback(rideName : String, bill: Int)
 }
 

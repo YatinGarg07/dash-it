@@ -18,6 +18,15 @@ import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.ActivityCompat
@@ -62,6 +71,9 @@ import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
 import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
 import com.mapbox.navigation.ui.maps.route.line.model.*
 import com.mapbox.search.result.SearchSuggestion
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
+import com.stripe.android.paymentsheet.rememberPaymentSheet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,10 +89,10 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
     private var mapView: MapView? = null
     private lateinit var cameraPosition: CameraOptions
     private lateinit var markerInBitmap: Bitmap
-    private  var pickUpPoint : Point? = null
-    private  var dropOffPoint: Point? = null
-    private lateinit var listOfPoint : List<Point>
-    private lateinit var pointAnnotationManager : PointAnnotationManager
+    private var pickUpPoint: Point? = null
+    private var dropOffPoint: Point? = null
+    private lateinit var listOfPoint: List<Point>
+    private lateinit var pointAnnotationManager: PointAnnotationManager
 
     private val mapboxMap: MapboxMap by lazy {
         binding.mapView.getMapboxMap()
@@ -97,16 +109,18 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
             )
         }
     }
-    private lateinit var routeLineOptions : MapboxRouteLineOptions
-    private lateinit var routeLineApi : MapboxRouteLineApi
-    private lateinit var routeLineView : MapboxRouteLineView
+    private lateinit var routeLineOptions: MapboxRouteLineOptions
+    private lateinit var routeLineApi: MapboxRouteLineApi
+    private lateinit var routeLineView: MapboxRouteLineView
 
     //Handles runtime permission of Location
     private val locationPrompt =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
 
+    private var selectedRidePrice = 0
+
     private fun isLocationPermissionGranted() {
-        if(ActivityCompat.checkSelfPermission(
+        if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -138,7 +152,7 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         //initializing components
         binding = DataBindingUtil.setContentView(this, R.layout.activity_maps)
         mapView = binding.mapView
-        binding.mapsViewModel=viewModel
+        binding.mapsViewModel = viewModel
         binding.lifecycleOwner = this
 
 
@@ -172,6 +186,10 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
 
         binding.menuButton.background.alpha = 255
 
+        viewModel.rideBill.observe(this, Observer {
+            selectedRidePrice = it
+        })
+
     }
 
     override fun onDestroy() {
@@ -181,7 +199,7 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         routeLineView.cancel()
     }
 
-    private fun pickUpPointFound(point: Point){
+    private fun pickUpPointFound(point: Point) {
         addMarkerToMap(point, markerInBitmap)
         cameraPosition = CameraOptions.Builder()
             .center(point)
@@ -206,15 +224,20 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         pointAnnotationManager.create(pointAnnotationOptions)
     }
 
-    private fun removeMarkerFromMap(point: Point){
+    private fun removeMarkerFromMap(point: Point) {
         // Set options for the resulting symbol layer.
         val pointAnnotationOptions: PointAnnotationOptions =
             PointAnnotationOptions().withPoint(point)
-        var annotationID : Long? = null
+        var annotationID: Long? = null
         pointAnnotationManager.annotations.forEach {
-            if(it.point==point)  annotationID=it.id
+            if (it.point == point) annotationID = it.id
         }
-        pointAnnotationManager.delete(pointAnnotationOptions.build(annotationID!!, pointAnnotationManager))
+        pointAnnotationManager.delete(
+            pointAnnotationOptions.build(
+                annotationID!!,
+                pointAnnotationManager
+            )
+        )
 
     }
 
@@ -244,17 +267,16 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         }
     }
 
-   override fun autoCompleteHaveFocus(hasFocus : Boolean){
-       if(hasFocus){
-        val params = binding.fragmentContainerView.layoutParams as LinearLayout.LayoutParams
-        params.weight = 4.0f
-        binding.fragmentContainerView.layoutParams = params
-       }
-       else{
-           val params = binding.fragmentContainerView.layoutParams as LinearLayout.LayoutParams
-           params.weight = 15.0f
-           binding.fragmentContainerView.layoutParams = params
-       }
+    override fun autoCompleteHaveFocus(hasFocus: Boolean) {
+        if (hasFocus) {
+            val params = binding.fragmentContainerView.layoutParams as LinearLayout.LayoutParams
+            params.weight = 4.0f
+            binding.fragmentContainerView.layoutParams = params
+        } else {
+            val params = binding.fragmentContainerView.layoutParams as LinearLayout.LayoutParams
+            params.weight = 15.0f
+            binding.fragmentContainerView.layoutParams = params
+        }
     }
 
     override fun onStart() {
@@ -264,12 +286,12 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
     }
 
     //callback from fragment
-    override fun getDropOffCoordinates(dropOffCoordinates : Point) {
+    override fun getDropOffCoordinates(dropOffCoordinates: Point) {
 
         dropOffPoint?.let {
             routeLineView.hidePrimaryRoute(mapboxMap.getStyle()!!)
             removeMarkerFromMap(it)
-            dropOffPoint=null
+            dropOffPoint = null
         }
 
         //this line should always be after aobve
@@ -277,12 +299,12 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         dropOffPointFound()
     }
 
-    private fun dropOffPointFound(){
+    private fun dropOffPointFound() {
         addMarkerToMap(dropOffPoint!!, markerInBitmap)
         cameraPosition = CameraOptions.Builder()
             .center(dropOffPoint)
             .zoom(11.0)
-            .padding(EdgeInsets(100.0,100.0,100.0, 100.0))
+            .padding(EdgeInsets(100.0, 100.0, 100.0, 100.0))
             .build()
         mapboxMap.flyTo(cameraPosition, MapAnimationOptions.mapAnimationOptions {
             duration(7000)
@@ -292,12 +314,12 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         //rendering routeline direction on map between pickup and dropoff points
         val routeOptions = RouteOptions.builder()
             .applyDefaultNavigationOptions()
-            .coordinatesList(listOf(pickUpPoint!!,dropOffPoint!!))
+            .coordinatesList(listOf(pickUpPoint!!, dropOffPoint!!))
             .alternatives(false)
             .build()
 
         //routeline callback
-        val navigationRouterCallback = object : NavigationRouterCallback{
+        val navigationRouterCallback = object : NavigationRouterCallback {
             override fun onCanceled(
                 routeOptions: RouteOptions,
                 routerOrigin: RouterOrigin
@@ -322,7 +344,7 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
                 routeLineApi.setNavigationRoutes(routes) { value ->
                     routeLineView.renderRouteDrawData(mapboxMap.getStyle()!!, value)
                     routeLineView.hideOriginAndDestinationPoints(mapboxMap.getStyle()!!)
-                    if (routeLineView.getPrimaryRouteVisibility(mapboxMap.getStyle()!!)==Visibility.NONE){
+                    if (routeLineView.getPrimaryRouteVisibility(mapboxMap.getStyle()!!) == Visibility.NONE) {
                         routeLineView.showPrimaryRoute(mapboxMap.getStyle()!!)
                     }
                 }
@@ -332,9 +354,9 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-        mapboxNavigation.requestRoutes(routeOptions,navigationRouterCallback)
+            mapboxNavigation.requestRoutes(routeOptions, navigationRouterCallback)
         }
-        listOfPoint = listOf(pickUpPoint!!,dropOffPoint!!)
+        listOfPoint = listOf(pickUpPoint!!, dropOffPoint!!)
 
         //to start fetching distance and duration
 
@@ -344,17 +366,17 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
     }
 
     override fun backToSelectDestinationFragment(isPopFromBackStack: Boolean) {
-        if(isPopFromBackStack){
-          if(dropOffPoint!=null){
-            removeMarkerFromMap(dropOffPoint!!)
-          }
+        if (isPopFromBackStack) {
+            if (dropOffPoint != null) {
+                removeMarkerFromMap(dropOffPoint!!)
+            }
             routeLineView.hidePrimaryRoute(mapboxMap.getStyle()!!)
-            dropOffPoint=null
+            dropOffPoint = null
 
             cameraPosition = CameraOptions.Builder()
                 .center(pickUpPoint)
                 .zoom(11.0)
-                .padding(EdgeInsets(100.0,100.0,100.0, 100.0))
+                .padding(EdgeInsets(100.0, 100.0, 100.0, 100.0))
                 .build()
             mapboxMap.flyTo(cameraPosition, MapAnimationOptions.mapAnimationOptions {
                 duration(7000)
@@ -362,18 +384,76 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         }
     }
 
-    private fun fetchFromMatrixApi(){
+    override fun StripePaymentForm() {
+        val context = applicationContext
+        //api call
+        lifecycleScope.launch {
+            viewModel.payNowForm(context,selectedRidePrice)
+        }
+        binding.paymentForm.setContent {
+            StripeGateway()
+        }
+    }
+
+    @Composable
+    fun StripeGateway() {
+
+        val paymentSheet = rememberPaymentSheet(::onPaymentSheetResult)
+        val paymentIntentClientSecret by viewModel.paymentIntentClientSecret.collectAsState()
+        val config by viewModel.customerConfig.collectAsState()
+
+        if(paymentIntentClientSecret.isNotEmpty()){
+            paymentSheet.presentWithPaymentIntent(
+                paymentIntentClientSecret = paymentIntentClientSecret,
+                configuration = PaymentSheet.Configuration(
+                    merchantDisplayName = "Dash Bird",
+                    customer = config,
+
+                )
+            )
+        }
+
+    }
+
+    private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
+        when (paymentSheetResult) {
+            is PaymentSheetResult.Canceled -> {
+                print("Canceled")
+                Toast.makeText(this, "Payment Cancelled", Toast.LENGTH_SHORT).show()
+                viewModel.updatePaymentIntentClientSecret("")
+            }
+
+            is PaymentSheetResult.Failed -> {
+                print("Error: ${paymentSheetResult.error}")
+                Toast.makeText(this, "${paymentSheetResult.error.message}", Toast.LENGTH_SHORT).show()
+                viewModel.updatePaymentIntentClientSecret("")
+            }
+
+            is PaymentSheetResult.Completed -> {
+                // Display for example, an order confirmation screen
+                print("Completed")
+                Toast.makeText(this, "Payment Completed", Toast.LENGTH_SHORT).show()
+                viewModel.updatePaymentIntentClientSecret("")
+            }
+        }
+    }
+
+
+    private fun fetchFromMatrixApi() {
         val url = "https://api.mapbox.com/directions-matrix/v1/mapbox/driving/" +
-            "${pickUpPoint?.longitude()}" +
-            ",${pickUpPoint?.latitude()}" +
-            ";${dropOffPoint?.longitude()}," +
-            "${dropOffPoint?.latitude()}" +
-            "?annotations=distance,duration&access_token=" +
-            getString(R.string.mapbox_access_token)
+                "${pickUpPoint?.longitude()}" +
+                ",${pickUpPoint?.latitude()}" +
+                ";${dropOffPoint?.longitude()}," +
+                "${dropOffPoint?.latitude()}" +
+                "?annotations=distance,duration&access_token=" +
+                getString(R.string.mapbox_access_token)
 
         viewModel.sendData(url)
 
     }
-
 }
+
+
+
+
 

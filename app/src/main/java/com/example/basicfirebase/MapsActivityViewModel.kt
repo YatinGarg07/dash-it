@@ -3,6 +3,7 @@ package com.example.basicfirebase
 import android.app.Application
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.getIntent
 import android.os.Bundle
@@ -14,8 +15,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.mapbox.geojson.Point
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.core.MapboxNavigationProvider
@@ -23,8 +26,14 @@ import com.mapbox.search.*
 import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+//import com.stripe.android.paymentsheet.PaymentSheet
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class MapsActivityViewModel(application: Application) : AndroidViewModel(application){
     // Create a LiveData with a String
@@ -43,10 +52,24 @@ class MapsActivityViewModel(application: Application) : AndroidViewModel(applica
     val rideName : MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+    val rideBill : MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>(0)
+    }
+
+    //val context = LocalContext.current
+    //var customerConfig by remember { mutableStateOf<PaymentSheet.CustomerConfiguration?>(null) }
+    //var paymentIntentClientSecret by remember { mutableStateOf<String?>(null) }
+
+    private val _customerConfig = MutableStateFlow<PaymentSheet.CustomerConfiguration?>(null)
+    val customerConfig = _customerConfig.asStateFlow()
+
+    private val _paymentIntentClientSecret  = MutableStateFlow("")
+    val paymentIntentClientSecret = _paymentIntentClientSecret.asStateFlow()
 
 
-    fun updateRideName(s : String){
+    fun updateRideDetails(s : String, price: Int){
         rideName.value = s
+        rideBill.value = price
     }
 
     suspend fun fetchDistanceMatrix(url : String?){
@@ -90,6 +113,53 @@ class MapsActivityViewModel(application: Application) : AndroidViewModel(applica
         matrixUrl.value = url
         Log.d(TAG,"Inside Send data")
     }
+
+
+    fun payNowForm(context: Context, billAmount: Int){
+        val amt = billAmount.toString()
+        val url = "http://192.168.1.79/stripe_uber/index.php?bill_amount=$billAmount";
+        val queue = Volley.newRequestQueue(getApplication())
+
+//        val jsonObj = JSONObject();
+//        jsonObj.put("bill_amount",billAmount)
+
+        // Request a string response from the provided URL.
+//        val jj = StringRequest(
+//            Request.Method.POST,
+//            url,
+//
+//        )
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.GET, url,null,
+            { response ->
+                //val distance = response.getJSONObject("distances").toString()
+                if(response!=null){
+                    _customerConfig.value = PaymentSheet.CustomerConfiguration(
+                        id = response.getString("customer"),
+                        ephemeralKeySecret = response.getString("ephemeralKey")
+                    )
+                    updatePaymentIntentClientSecret(response.getString("paymentIntent"))
+
+                    PaymentConfiguration.init(context, response.getString("publishableKey"))
+                }
+
+            },
+            {
+                Log.d(ContentValues.TAG, it.toString())
+
+            })
+        //PaymentSheet
+
+        queue.add(jsonObjectRequest)
+    }
+
+
+    fun updatePaymentIntentClientSecret(newSecret: String){
+        _paymentIntentClientSecret.value = newSecret
+    }
+
+
+
 
 
 

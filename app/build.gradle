@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 34
 
 
     defaultConfig {
         applicationId "com.example.basicfirebase"
         minSdk 21
-        targetSdk 32
+        targetSdk 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -112,6 +112,11 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.material3:material3:$compose_material3"
     // implementation "androidx.compose.material3:material3-window-size-class:1.0.0-alpha09"
+
+
+    // Stripe Android SDK
+//    implementation 'com.stripe:stripe-android:20.18.0'
+    implementation 'com.stripe:stripe-android:20.29.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
