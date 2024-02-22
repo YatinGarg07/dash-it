@@ -16,8 +16,8 @@ jobs:
       run: chmod +x ./gradlew
     - name: Get local.properties from secrets
       run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties  
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
     - name: Releasing using Hub
       uses: r0user/release-apk@main
       env:
