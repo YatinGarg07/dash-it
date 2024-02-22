@@ -117,7 +117,7 @@ class MapsActivityViewModel(application: Application) : AndroidViewModel(applica
 
     fun payNowForm(context: Context, billAmount: Int){
         val amt = billAmount.toString()
-        val url = "http://192.168.1.79/stripe_uber/index.php?bill_amount=$billAmount";
+        val url = "https://pmplwyznb7.execute-api.ap-south-1.amazonaws.com?bill_amount=$billAmount";
         val queue = Volley.newRequestQueue(getApplication())
 
 //        val jsonObj = JSONObject();

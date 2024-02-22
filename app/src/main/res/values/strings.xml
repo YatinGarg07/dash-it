@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Uber Clone</string>
+    <string name="app_name">Dash It</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
