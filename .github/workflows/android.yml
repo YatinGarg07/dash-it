@@ -14,6 +14,8 @@ jobs:
         java-version: 11
     - name: Make Gradle executable
       run: chmod +x ./gradlew
+    - name: Get local.properties from secrets
+      run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties  
     - name: Build Debug APK
       run: ./gradlew assembleDebug
     - name: Releasing using Hub
