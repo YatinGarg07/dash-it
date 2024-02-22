@@ -1,25 +1,44 @@
-name: Build & Publish Release APK
+name: Build & Deploy Release APK
 
-on: push
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   Gradle:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout code
-      uses: actions/checkout@v2
-    - name: setup jdk
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
-    - name: Make Gradle executable
-      run: chmod +x ./gradlew
-    - name: Get local.properties from secrets
-      run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties  
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
-    - name: Releasing using Hub
-      uses: r0user/release-apk@main
-      env:
-       GITHUB_TOKEN: ${{ secrets.TOKEN }}
-       APP_FOLDER: app
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: setup jdk
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+      - name: Get local.properties from secrets
+        run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+      - name: Build Release bundle
+        run: ./gradlew bundleRelease
+      - name: Upload Release Build to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-artifacts
+          path: |
+            app/build/outputs/apk/release/
+            app/build/outputs/bundle/release/
+
+      - name: Create Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          prerelease: true
+          files: |
+            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/bundle/release/app-release.aab
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          APP_FOLDER: app
