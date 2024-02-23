@@ -3,12 +3,27 @@
 DashIt is a Client side Android application designed to enable user to avail cab booking service, With 3 Different categories of rides Dash X, Dash XL, Dash LUX, Along with appropriate fare &
 real time Distance calculation between Pickup & Destination location.
 
-## Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+## Features
+- Integrated Payment Gateway using Stripe Payment Gateways.
+- Deployed the backend web application written in php using **AWS Lambda** & **AWS API Gateways** .
+- Build a **CI/CD Pipeline** using Github actions to generate release builds & .apk files.
+- Achieved Interoperability along side Views using Jepack compose interoperablity Apis.
+- Search Location Feature with **Custom AutoComplete Widget** implemented using Mapbox Search APIs.
+- Short distance calculation between pickup & Destination with Distance Matrix APIs (Mapbox).
+- Handling Asynchronous Tasks using **Kotlin Coroutines**, **Live Data** & **Kotlin Flows**.
+- Eased Development process with Dependency Injections using **Dagger Hilt**.
+
+
+## Screen Shots
+|          |             |                |          |
+| :---:    |    :----:   |          :---: |    :---: |
+| Home Screen <br> <br>![1](https://github.com/YatinGarg07/dash-it/assets/73949161/ccd2d6b2-170a-41c7-8e96-2cbe189f7802)| Login Screen <br> <br> ![2](https://github.com/YatinGarg07/dash-it/assets/73949161/9926ee1b-5676-49af-a463-2fa4acdcda9e)| Select Destination <br> <br> ![3](https://github.com/YatinGarg07/dash-it/assets/73949161/f9ae89b2-8107-46fe-8a5a-552e4899bab2)| Select Ride Screen <br> <br>![4](https://github.com/YatinGarg07/dash-it/assets/73949161/371f7af7-2fcc-4cf3-875f-c82b29d83b9d) |
+Confirm Ride & Checkout Screen <br> <br> ![5](https://github.com/YatinGarg07/dash-it/assets/73949161/06422466-cce4-48d1-9479-ca96b02d0739)
+
+## Usage
+<div align="center">
+  <video src="https://github.com/YatinGarg07/dash-it/assets/73949161/e15167df-55f2-453f-8815-1fb0aba8f8c4"/>
+</div>
 
 ## Tech Stack
 
@@ -24,16 +39,6 @@ real time Distance calculation between Pickup & Destination location.
 ### Build & CI
 - [Github Actions](https://github.com/Ivy-Apps/ivy-wallet/actions) (CI/CD)
 
-## Features
-
-![select_ride](https://github.com/YatinGarg07/dash-it/assets/73949161/8027fe92-ca5c-44e0-a032-ad86b39bc04d) ![payment_stripe](https://github.com/YatinGarg07/dash-it/assets/73949161/01b9e98d-a241-45b7-87e2-73fa9f8c4797)
-- Feature 1:
-
-
-- Feature 2:
-
-- Feature 3: [Description of feature 3]
-
 ## Installation
 
 1. Clone the repository:
@@ -46,9 +51,8 @@ real time Distance calculation between Pickup & Destination location.
 
 3. Build and run the project on an emulator or physical device.
 
-## Usage
 
-[Instructions on how to use the application. Provide screenshots or gifs if possible.]
+
 
 ## Contributing
 
