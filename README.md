@@ -3,15 +3,24 @@
 DashIt is a Client side Android application designed to enable user to avail cab booking service, With 3 Different categories of rides Dash X, Dash XL, Dash LUX, Along with appropriate fare &
 real time Distance calculation between Pickup & Destination location.
 
+
 ## Features
-- Integrated Payment Gateway using Stripe Payment Gateways.
-- Deployed the backend web application written in php using **AWS Lambda** & **AWS API Gateways** .
-- Build a **CI/CD Pipeline** using Github actions to generate release builds & .apk files.
-- Achieved Interoperability along side Views using Jepack compose interoperablity Apis.
-- Search Location Feature with **Custom AutoComplete Widget** implemented using Mapbox Search APIs.
-- Short distance calculation between pickup & Destination with Distance Matrix APIs (Mapbox).
-- Handling Asynchronous Tasks using **Kotlin Coroutines**, **Live Data** & **Kotlin Flows**.
-- Eased Development process with Dependency Injections using **Dagger Hilt**.
+
+- **Payment Gateway Integration**: Seamlessly process transactions within the app using Stripe payment gateways, ensuring secure and reliable payment processing.
+  
+- **Backend Deployment**: Utilize **AWS Lambda** & **AWS API** Gateways for deploying the PHP backend, ensuring scalable and efficient serverless architecture.
+
+- **CI/CD Pipeline**: Implement Github Actions for continuous integration and continuous deployment, automating the process of generating **release builds** & .apk files, ensuring fast and reliable delivery of updates.
+
+- **Jetpack Compose Interoperability**: Enhance user interface development by leveraging **Jetpack Compose** interoperability APIs, allowing seamless integration with traditional Android Views and simplifying UI development.
+
+- **Location Search**: Implement a robust location search feature utilizing Mapbox Search APIs, providing users with accurate and efficient location search functionality.
+
+- **Distance Calculation**: Utilize Distance Matrix APIs (Mapbox) to calculate short distances between pickup & destination locations, providing users with accurate distance information for better decision-making.
+
+- **Asynchronous Task Handling**: Employ **Kotlin Coroutines**, **LiveData** & **Kotlin Flows** to manage asynchronous tasks efficiently, ensuring smooth and responsive user experience while handling background operations.
+
+- **Dependency Injection**: Streamline development and improve code maintainability by implementing Dependency Injection using **Dagger Hilt**, facilitating modular and testable code architecture.
 
 
 ## Screen Shots
