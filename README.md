@@ -3,24 +3,23 @@
 DashIt is a Client side Android application designed to enable user to avail cab booking service, With 3 Different categories of rides Dash X, Dash XL, Dash LUX, Along with appropriate fare &
 real time Distance calculation between Pickup & Destination location.
 
-
 ## Features
 
 - **Payment Gateway Integration**: Seamlessly process transactions within the app using Stripe payment gateways, ensuring secure and reliable payment processing.
-  
-- **Backend Deployment**: Utilize **AWS Lambda** & **AWS API** Gateways for deploying the PHP backend, ensuring scalable and efficient serverless architecture.
 
-- **CI/CD Pipeline**: Implement Github Actions for continuous integration and continuous deployment, automating the process of generating **release builds** & .apk files, ensuring fast and reliable delivery of updates.
+- **Backend Deployment**: Deploy the PHP backend on AWS Lambda & AWS API Gateways, ensuring scalability and efficiency in server management.
 
-- **Jetpack Compose Interoperability**: Enhance user interface development by leveraging **Jetpack Compose** interoperability APIs, allowing seamless integration with traditional Android Views and simplifying UI development.
+- **CI/CD Pipeline**: Implement Github Actions for automated release builds & .apk file generation, ensuring a streamlined and efficient deployment process.
 
-- **Location Search**: Implement a robust location search feature utilizing Mapbox Search APIs, providing users with accurate and efficient location search functionality.
+- **Jetpack Compose Interoperability**: Enhance user interface development by leveraging Jetpack Compose interoperability APIs, enabling seamless integration with traditional Android Views.
 
-- **Distance Calculation**: Utilize Distance Matrix APIs (Mapbox) to calculate short distances between pickup & destination locations, providing users with accurate distance information for better decision-making.
+- **Location Search**: Implement a robust location search functionality powered by Mapbox Search APIs, providing users with accurate and efficient search results.
 
-- **Asynchronous Task Handling**: Employ **Kotlin Coroutines**, **LiveData** & **Kotlin Flows** to manage asynchronous tasks efficiently, ensuring smooth and responsive user experience while handling background operations.
+- **Distance Calculation**: Utilize Distance Matrix APIs (Mapbox) for short distance calculation between pickup & destination locations, enabling accurate distance estimation.
 
-- **Dependency Injection**: Streamline development and improve code maintainability by implementing Dependency Injection using **Dagger Hilt**, facilitating modular and testable code architecture.
+- **Asynchronous Task Handling**: Efficiently handle asynchronous tasks using Kotlin Coroutines, LiveData & Kotlin Flows, ensuring smooth and responsive user experience.
+
+- **Dependency Injection**: Streamline development process with Dagger Hilt for dependency injection, enhancing code modularity and testability.
 
 
 ## Screen Shots
