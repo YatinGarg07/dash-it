@@ -46,7 +46,7 @@ class RideOptionsFragment : Fragment() , OnRideSelect {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_ride_options,container,false)
         makeAdapter("")
         binding.rideOptionsRecyclerView.adapter = customAdapter
-        binding.rideOptionsRecyclerView.layoutManager = LinearLayoutManager(this.context!!)
+        binding.rideOptionsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
         rideNameObserver = Observer<String>{
             binding.rideButton.text = "Choose $it"
             binding.rideButton.background.alpha = 255
@@ -135,7 +135,7 @@ class RideOptionsFragment : Fragment() , OnRideSelect {
         data.add(RideOptionData("https://links.papareact.com/5w8","Dash XL", duration, 1.2F))
         data.add(RideOptionData("https://links.papareact.com/7pf","Dash LUX", duration, 1.75F))
 
-         customAdapter = RidesAdapter(data,this.context!!,this)
+         customAdapter = RidesAdapter(data,this.requireContext(),this)
     }
 
     private fun updateDataDurationAndAdapter(duration : String){
