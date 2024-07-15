@@ -106,6 +106,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser) {
         val intent = Intent(this,HomeScreen::class.java)
+        Log.d("Login Activity", "Going to Home Screen")
 
         startActivity(intent)
         Toast.makeText(this,"Logged in as ${user.displayName}",Toast.LENGTH_LONG).show()

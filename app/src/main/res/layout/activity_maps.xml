@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="mapsViewModel"
             type="com.example.basicfirebase.MapsActivityViewModel" />
@@ -31,7 +30,8 @@
                 android:layout_weight="15"
                 mapbox:mapbox_cameraTargetLat="40.7128"
                 mapbox:mapbox_cameraTargetLng="-74.0060"
-                mapbox:mapbox_cameraZoom="9.0" />
+                mapbox:mapbox_cameraZoom="9.0"
+                />
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/fragmentContainerView"

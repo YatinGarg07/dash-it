@@ -360,7 +360,6 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
 
         //to start fetching distance and duration
 
-
         fetchFromMatrixApi()
 
     }
