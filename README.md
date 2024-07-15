@@ -52,7 +52,7 @@ Confirm Ride & Checkout Screen <br> <br> ![5](https://github.com/YatinGarg07/das
 1. Clone the repository:
 
     ```
-    git clone https://github.com/yourusername/myapp.git
+    git clone https://github.com/YatinGarg07/dash-it.git
     ```
 
 2. Open the project in Android Studio.
