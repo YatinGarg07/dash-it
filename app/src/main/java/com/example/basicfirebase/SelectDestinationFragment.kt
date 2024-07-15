@@ -110,7 +110,7 @@ class SelectDestinationFragment : Fragment() {
 
         //setting autocomplete of maps activity
         suggestionList = ArrayList()
-        adapter = ArrayAdapter(this.context!!, R.layout.suggestions_item_list_view, suggestionList!!
+        adapter = ArrayAdapter(this.requireContext(), R.layout.suggestions_item_list_view, suggestionList!!
         )
         viewModel.initialize(adapter)
         binding.autocompleteTextView.threshold = 2
