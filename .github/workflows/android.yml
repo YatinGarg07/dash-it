@@ -30,14 +30,12 @@ jobs:
           app/build/outputs/apk/debug/app-debug.apk
           
     - name: Create Github Release
-      uses: comnoco/create-release-action@v2.0.5
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        generate_release_notes: true
+        prerelease: false
         files: |
-          app/build/outputs/apk/debug/app-debug.apk
-        draft: false
-        prerelease: false  
+            app/build/outputs/apk/debug/app-debug.apk
           
       env:
        GITHUB_TOKEN: ${{ secrets.TOKEN }}
