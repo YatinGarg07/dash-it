@@ -83,12 +83,16 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:latest.release'
 
     //mapbox
-    implementation 'com.mapbox.maps:android:10.6.0'
+//    implementation 'com.mapbox.maps:android:10.6.0'
+    implementation 'com.mapbox.maps:android:11.5.0'
 
     //mapbox search box
-    implementation 'com.mapbox.search:mapbox-search-android-ui:1.0.0-beta.32'
+//    implementation 'com.mapbox.search:mapbox-search-android-ui:1.0.0-beta.32'
     //mapbox directionapi
-    implementation "com.mapbox.navigation:android:2.7.0-alpha.1"
+//    implementation "com.mapbox.navigation:android:2.7.0-alpha.1"
+    implementation "com.mapbox.navigationcore:android:3.2.0"
+
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
 
     //glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'

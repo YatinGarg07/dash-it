@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BasicFirebase"
         tools:targetApi="m">
+
+        <!-- Mapbox Access Token -->
+        <meta-data
+            android:name="com.mapbox.token"
+            android:value="@string/mapbox_access_token" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="true">

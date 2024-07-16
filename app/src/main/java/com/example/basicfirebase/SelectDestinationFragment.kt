@@ -24,11 +24,15 @@ import com.example.basicfirebase.search.Feature
 import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Point.fromLngLat
-import com.mapbox.search.result.SearchSuggestion
 import kotlinx.coroutines.*
 
 
 class SelectDestinationFragment : Fragment() {
+
+    companion object{
+        val TAG = "SELECT DESTINATION FRAGMENT"
+    }
+
     private lateinit var viewModel: SelectDestinationViewModel
     private lateinit var binding: FragmentSelectDestinationBinding
     private lateinit var adapter: ArrayAdapter<String>
@@ -62,6 +66,7 @@ class SelectDestinationFragment : Fragment() {
         }
         viewModel.suggestionsList.observe(viewLifecycleOwner, Observer {
             displaySuggestions(it)
+            Log.d(TAG, it.toString())
         })
 
         binding.rideButton.setOnClickListener {
@@ -113,12 +118,12 @@ class SelectDestinationFragment : Fragment() {
         adapter = ArrayAdapter(this.requireContext(), R.layout.suggestions_item_list_view, suggestionList!!
         )
         viewModel.initialize(adapter)
+
         binding.autocompleteTextView.threshold = 2
         binding.autocompleteTextView.setAdapter(adapter)
 
-        var counter = 0
         autoCompleteTextObserver= Observer<String> {
-            CoroutineScope(Dispatchers.IO).launch{
+
                 var text : String= ""
                 it.iterator().forEach {
                     if(it == ' '){
@@ -128,9 +133,20 @@ class SelectDestinationFragment : Fragment() {
                         text="$text$it"
                     }
                 }
-                val url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$text.json?limit=5&access_token=${getString(R.string.mapbox_access_token)}"
-                if(it.length>=2) {viewModel.fetchSuggestions(url);}
-                counter++;
+                if(it.length>=2) {
+                    CoroutineScope(Dispatchers.IO).launch{
+                        delay(200)
+                        networkCallForSuggestion(text)
+                    }
+
+
+                }
+                else{
+//                    withContext(Dispatchers.Main){
+//                        adapter.clear()
+//                        adapter.notifyDataSetChanged()
+//                    }
+
             }
 
         }
@@ -142,41 +158,48 @@ class SelectDestinationFragment : Fragment() {
         // Inflate the layout for this fragment
 
         binding.navFavouriteHome.setOnClickListener {
-            val hardCodedHomeLatLong = Point.fromLngLat(76.79123642703713,30.69131767037568)
+            val hardCodedHomeLatLong = Point.fromLngLat( 76.76808874924124, 30.696438087505946)
             dropOffCoordinates = hardCodedHomeLatLong
 
             listener.getDropOffCoordinates(dropOffCoordinates!!)
             listener.autoCompleteHaveFocus(false)
 
             binding.autocompleteTextView.onEditorAction(EditorInfo.IME_ACTION_DONE)
-            binding.autocompleteTextView.setText( "Ram Darbar, Chandigarh, India")
+            binding.autocompleteTextView.setText( "Sector 47, Chandigarh, India")
         }
         binding.navFavouriteWork.setOnClickListener {
-            val hardCodedHomeLatLong = Point.fromLngLat(76.77766352605758, 30.758382138325004)
+            val hardCodedHomeLatLong = Point.fromLngLat(77.20892930637079, 28.689158103991122)
             dropOffCoordinates = hardCodedHomeLatLong
 
             listener.getDropOffCoordinates(dropOffCoordinates!!)
             listener.autoCompleteHaveFocus(false)
 
             binding.autocompleteTextView.onEditorAction(EditorInfo.IME_ACTION_DONE)
-            binding.autocompleteTextView.setText( "Sector 11, Chandigarh, India")
+            binding.autocompleteTextView.setText( "University of Delhi, New Delhi, India")
         }
         return binding.root
+    }
+
+    private suspend fun networkCallForSuggestion(text: String){
+        val job = CoroutineScope(Dispatchers.IO).launch{
+            val url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$text.json?access_token=${
+                getString(R.string.mapbox_access_token)
+            }"
+            viewModel.fetchSuggestions(url)
+        }
+        job.cancelAndJoin()
     }
 
     private fun displaySuggestions(arr : List<Feature>){
         suggestionList?.clear()
         arr.listIterator().forEach {
-
             suggestionList?.add(it.place_name)
-            Log.d(ContentValues.TAG, it.place_name + "Coordinates : ${it.center[1]},${it.center[0]}")
-            Log.d(ContentValues.TAG, (suggestionList?.get(suggestionList!!.size-1)) + "Coordinates : ${it.center[1]},${it.center[0]}")
+            Log.d(TAG, it.place_name + "Coordinates : ${it.center[1]},${it.center[0]}")
         }
-        Log.d(ContentValues.TAG, "${suggestionList?.size}")
+        Log.d(TAG, "${suggestionList?.size}")
             adapter.clear()
             adapter.addAll(suggestionList!!)
             adapter.notifyDataSetChanged()
-
     }
 
 

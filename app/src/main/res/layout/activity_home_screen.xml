@@ -166,7 +166,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ram Darbar, Chandigarh, India"
+                android:text="Sector 47, Chandigarh, India"
                 android:ellipsize="end"
                 android:textStyle="normal"
                 />
@@ -212,7 +212,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sector 11, Chandigarh, India"
+                android:text="University of Delhi, New Delhi, India"
                 android:ellipsize="end"
                 android:textStyle="normal"
                 />

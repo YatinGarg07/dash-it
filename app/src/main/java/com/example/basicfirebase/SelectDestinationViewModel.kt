@@ -14,9 +14,6 @@ import com.example.basicfirebase.search.Feature
 import com.example.basicfirebase.search.SuggestionsList
 import com.google.gson.Gson
 import com.mapbox.geojson.Point
-import com.mapbox.search.*
-import com.mapbox.search.result.SearchResult
-import com.mapbox.search.result.SearchSuggestion
 import kotlinx.coroutines.*
 
 class SelectDestinationViewModel(application: Application) : AndroidViewModel(application) {

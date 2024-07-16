@@ -1,5 +1,6 @@
 package com.example.basicfirebase
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -50,9 +51,12 @@ import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.MapboxDirections
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.directions.v5.models.RouteOptions
+import com.mapbox.bindgen.Expected
+import com.mapbox.common.MapboxOptions
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
+import com.mapbox.maps.plugin.Plugin
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.annotation.AnnotationType
@@ -65,17 +69,17 @@ import com.mapbox.navigation.base.route.*
 import com.mapbox.navigation.core.MapboxNavigation
 import com.mapbox.navigation.core.MapboxNavigationProvider
 import com.mapbox.navigation.core.directions.session.RoutesObserver
-import com.mapbox.navigation.core.directions.session.RoutesUpdatedResult
 import com.mapbox.navigation.ui.base.util.MapboxNavigationConsumer
+import com.mapbox.navigation.ui.maps.route.line.MapboxRouteLineApiExtensions.clearRouteLine
 import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineApi
 import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
 import com.mapbox.navigation.ui.maps.route.line.model.*
-import com.mapbox.search.result.SearchSuggestion
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import com.stripe.android.paymentsheet.rememberPaymentSheet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.util.*
@@ -84,7 +88,6 @@ import kotlin.properties.Delegates
 
 
 class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRecieved, RideOptionsFragment.OnCallBackRecieved {
-
     private lateinit var binding: ActivityMapsBinding
     private var mapView: MapView? = null
     private lateinit var cameraPosition: CameraOptions
@@ -95,7 +98,7 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
     private lateinit var pointAnnotationManager: PointAnnotationManager
 
     private val mapboxMap: MapboxMap by lazy {
-        binding.mapView.getMapboxMap()
+        binding.mapView.mapboxMap
     }
     private val viewModel by viewModels<MapsActivityViewModel>()
     private val mapboxNavigation by lazy {
@@ -104,14 +107,37 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         } else {
             MapboxNavigationProvider.create(
                 NavigationOptions.Builder(this)
-                    .accessToken(getString(R.string.mapbox_access_token))
                     .build()
             )
         }
     }
-    private lateinit var routeLineOptions: MapboxRouteLineOptions
+
+//    private lateinit var routeLineOptions: MapboxRouteLineOptions
     private lateinit var routeLineApi: MapboxRouteLineApi
     private lateinit var routeLineView: MapboxRouteLineView
+
+    val routesObserver = RoutesObserver { routes ->
+        Log.d(TAG, "Routes observer was called")
+
+
+
+
+//        routeLineApi.setNavigationRoutes(routes.navigationRoutes) { value ->
+//
+//            mapView!!.mapboxMap.style?.apply {
+//                routeLineView.renderRouteDrawData(this,value)
+//                routeLineView.hideOriginAndDestinationPoints(mapboxMap.style!!)
+//            }
+//
+//            routeLineView.renderRouteDrawData(mapboxMap.style!!, value)
+//            routeLineView.hideOriginAndDestinationPoints(mapboxMap.style!!)
+//            if (routeLineView.getPrimaryRouteVisibility(mapboxMap.style!!) == Visibility.NONE) {
+//                routeLineView.showPrimaryRoute(mapboxMap.style!!)
+//            }
+//
+//
+//        }
+    }
 
     //Handles runtime permission of Location
     private val locationPrompt =
@@ -143,6 +169,11 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        MapboxOptions.accessToken = getString(R.string.mapbox_access_token)
+        MapboxOptions.mapsOptions.tileStoreUsageMode = TileStoreUsageMode.READ_ONLY
+
+
+        mapboxNavigation.registerRoutesObserver(routesObserver)
         //get bitmap version of marker only once
         bitmapFromDrawableRes(
             this@MapsActivity,
@@ -156,8 +187,11 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         binding.lifecycleOwner = this
 
 
+
+
         //initializing mapbox's map
-        mapView?.getMapboxMap()?.loadStyleUri(Style.MAPBOX_STREETS)
+//        mapView?.getMapboxMap()?.loadStyleUri(Style.MAPBOX_STREETS)
+        mapView!!.mapboxMap.loadStyle(Style.MAPBOX_STREETS)
         pointAnnotationManager = mapView!!.annotations.createAnnotationManager(
             AnnotationType.PointAnnotation,
             null
@@ -175,10 +209,15 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
 
         }
 
-        routeLineOptions = MapboxRouteLineOptions.Builder(this)
-            .build()
-        routeLineApi = MapboxRouteLineApi(routeLineOptions)
-        routeLineView = MapboxRouteLineView(routeLineOptions)
+
+
+//        routeLineOptions = MapboxRouteLineOptions.Builder(this)
+//            .build()
+//
+        val routeLineApiOptions = MapboxRouteLineApiOptions.Builder().build()
+        val routeLineViewOptions = MapboxRouteLineViewOptions.Builder(this).build()
+        routeLineApi = MapboxRouteLineApi(routeLineApiOptions)
+        routeLineView = MapboxRouteLineView(routeLineViewOptions)
 
         binding.menuButton.setOnClickListener {
             finish()
@@ -207,7 +246,7 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
             .build()
         // mapView!!.getMapboxMap().setCamera(cameraPosition)
         //little animation to move camera
-        mapView!!.getMapboxMap().flyTo(cameraPosition, MapAnimationOptions.mapAnimationOptions {
+        mapView!!.mapboxMap.flyTo(cameraPosition, MapAnimationOptions.mapAnimationOptions {
             duration(7000)
         })
     }
@@ -228,8 +267,9 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         // Set options for the resulting symbol layer.
         val pointAnnotationOptions: PointAnnotationOptions =
             PointAnnotationOptions().withPoint(point)
-        var annotationID: Long? = null
+        var annotationID: String? = null
         pointAnnotationManager.annotations.forEach {
+
             if (it.point == point) annotationID = it.id
         }
         pointAnnotationManager.delete(
@@ -285,11 +325,17 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
         isLocationPermissionGranted()
     }
 
+    override fun onStop() {
+        super.onStop()
+        mapboxNavigation.unregisterRoutesObserver(routesObserver)
+    }
+
     //callback from fragment
     override fun getDropOffCoordinates(dropOffCoordinates: Point) {
 
         dropOffPoint?.let {
-            routeLineView.hidePrimaryRoute(mapboxMap.getStyle()!!)
+            routeLineView.hidePrimaryRoute(mapboxMap.style!!)
+//
             removeMarkerFromMap(it)
             dropOffPoint = null
         }
@@ -307,7 +353,7 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
             .padding(EdgeInsets(100.0, 100.0, 100.0, 100.0))
             .build()
         mapboxMap.flyTo(cameraPosition, MapAnimationOptions.mapAnimationOptions {
-            duration(7000)
+            duration(7200)
         })
         //mapboxMap.cameraForCoordinates(listOf(pickUpPoint!!,dropOffPoint!!),EdgeInsets(100.0,100.0,100.0, 100.0))
 
@@ -320,11 +366,9 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
 
         //routeline callback
         val navigationRouterCallback = object : NavigationRouterCallback {
-            override fun onCanceled(
-                routeOptions: RouteOptions,
-                routerOrigin: RouterOrigin
-            ) {
-                TODO("Not yet implemented")
+
+            override fun onCanceled(routeOptions: RouteOptions, routerOrigin: String) {
+                Log.d(TAG, "onCanceled: Request Cancelled")
             }
 
             override fun onFailure(
@@ -335,31 +379,54 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
 
             }
 
-            override fun onRoutesReady(
-                routes: List<NavigationRoute>,
-                routerOrigin: RouterOrigin
-            ) {
-                //val gson = GsonBuilder().setPrettyPrinting().create()
-                mapboxNavigation.setNavigationRoutes(routes)
-                routeLineApi.setNavigationRoutes(routes) { value ->
-                    routeLineView.renderRouteDrawData(mapboxMap.getStyle()!!, value)
-                    routeLineView.hideOriginAndDestinationPoints(mapboxMap.getStyle()!!)
-                    if (routeLineView.getPrimaryRouteVisibility(mapboxMap.getStyle()!!) == Visibility.NONE) {
-                        routeLineView.showPrimaryRoute(mapboxMap.getStyle()!!)
+            override fun onRoutesReady(routes: List<NavigationRoute>, routerOrigin: String) {
+
+                //Print routes
+                Log.d(TAG, "New Routes found")
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    mapboxNavigation.setNavigationRoutes(routes)
+                    routeLineApi.setNavigationRoutes(routes) { value ->
+
+                        routeLineView.showPrimaryRoute(mapboxMap.style!!)
+                        routeLineView.renderRouteDrawData(mapboxMap.style!!, value)
+                        routeLineView.hideOriginAndDestinationPoints(mapboxMap.style!!)
+//                    if (routeLineView.getPrimaryRouteVisibility(mapboxMap.style!!) == Visibility.NONE) {
+//
+//
+//                   }
+                        Log.d(TAG, "onRoutesReady: ${routeLineApi.getNavigationRoutes()}")
+
+
+
                     }
                 }
-//                    mapboxMap.coordinateBoundsForCamera(cameraPosition)
 
+
+
+
+
+
+
+                }
             }
-        }
 
-        CoroutineScope(Dispatchers.IO).launch {
+
+
+
+
+
             mapboxNavigation.requestRoutes(routeOptions, navigationRouterCallback)
-        }
+
+
+//        CoroutineScope(Dispatchers.Main).launch{
+//            job.cancelAndJoin()
+//        }
+
+
         listOfPoint = listOf(pickUpPoint!!, dropOffPoint!!)
 
         //to start fetching distance and duration
-
         fetchFromMatrixApi()
 
     }
@@ -449,6 +516,10 @@ class MapsActivity : AppCompatActivity(), SelectDestinationFragment.OnCallBackRe
 
         viewModel.sendData(url)
 
+    }
+
+    companion object{
+        private val TAG = "MAPS ACTIVITY"
     }
 }
 

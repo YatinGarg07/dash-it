@@ -14,9 +14,6 @@ import com.example.basicfirebase.search.SuggestionsList
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
-import com.mapbox.android.core.location.LocationEngineProvider
-import com.mapbox.search.*
-import com.mapbox.search.result.SearchSuggestion
 import kotlinx.coroutines.*
 
 class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {

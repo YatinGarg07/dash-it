@@ -22,10 +22,6 @@ import com.google.gson.JsonObject
 import com.mapbox.geojson.Point
 import com.mapbox.navigation.base.options.NavigationOptions
 import com.mapbox.navigation.core.MapboxNavigationProvider
-import com.mapbox.search.*
-import com.mapbox.search.result.ResultAccuracy
-import com.mapbox.search.result.SearchResult
-import com.mapbox.search.result.SearchSuggestion
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 //import com.stripe.android.paymentsheet.PaymentSheet

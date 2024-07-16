@@ -16,8 +16,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.geojson.Point
-import com.mapbox.search.*
-import com.mapbox.search.result.SearchSuggestion
+//import com.mapbox.search.*
+//import com.mapbox.search.result.SearchSuggestion
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,7 +49,7 @@ class HomeScreen : AppCompatActivity() {
         //Setting AutoComplete
         autoCompleteTextObserver = Observer<String>{
             if(it=="") pickUpCoordinates = null
-            CoroutineScope(Dispatchers.IO).launch{
+//            CoroutineScope(Dispatchers.IO).launch{
                 var text : String= ""
                 it.iterator().forEach {
                     if(it == ' '){
@@ -59,9 +59,16 @@ class HomeScreen : AppCompatActivity() {
                         text="$text$it"
                     }
                 }
-                val url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$text.json?access_token=${getString(R.string.mapbox_access_token)}"
-                if(it.length>=2) viewModel.fetchSuggestions(url)
-            }
+
+                if(it.length>=2) {
+
+                    CoroutineScope(Dispatchers.IO).launch{
+                        delay(200)
+                        networkCallForSuggestion(text)
+                    }
+
+                }
+
 
         }
         binding.autocompleteTextView.threshold = 2
@@ -94,20 +101,30 @@ class HomeScreen : AppCompatActivity() {
         }
 
         binding.navFavouriteHome.setOnClickListener {
-            val hardCodedHomeLatLong = listOf(76.79123642703713,30.69131767037568)
+            val hardCodedHomeLatLong = listOf(76.76808874924124, 30.696438087505946)
             pickUpCoordinates = hardCodedHomeLatLong
-            binding.autocompleteTextView.setText( "Ram Darbar, Chandigarh, India")
+            binding.autocompleteTextView.setText( "Sector 47, Chandigarh, India")
             goGetRide()
 
         }
         binding.navFavouriteWork.setOnClickListener {
-            val hardCodedWorkLatLong = listOf(76.77766352605758, 30.758382138325004)
+            val hardCodedWorkLatLong = listOf(77.20892930637079, 28.689158103991122)
             pickUpCoordinates=hardCodedWorkLatLong
-            binding.autocompleteTextView.setText( "Sector 11, Chandigarh, India")
+            binding.autocompleteTextView.setText( "University of Delhi, New Delhi, India")
             goGetRide()
         }
 
 
+    }
+
+    suspend fun networkCallForSuggestion(text: String){
+        val job = CoroutineScope(Dispatchers.IO).launch{
+            val url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$text.json?access_token=${
+                getString(R.string.mapbox_access_token)
+            }"
+            viewModel.fetchSuggestions(url)
+        }
+        job.cancelAndJoin()
     }
 
     private fun goGetRide() {
