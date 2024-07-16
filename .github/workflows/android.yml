@@ -15,7 +15,7 @@ jobs:
       uses: actions/setup-java@v4.2.1
       with:
         java-version: '18'
-        distribution: 'oracle'
+        distribution: 'adopt'
     - name: Make Gradle executable
       run: chmod +x ./gradlew
     - name: Get local.properties from secrets
