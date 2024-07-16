@@ -1,4 +1,4 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.basicfirebase.databinding.RideOptionLayoutBinding
+import com.example.dashit.databinding.RideOptionLayoutBinding
 
 const val PRICE_SURCHARGE = 1.5
 class RidesAdapter(list : ArrayList<RideOptionData>,private val context : Context, private val listener : OnRideSelect) : RecyclerView.Adapter<RidesAdapter.RideOption>() {

@@ -1,29 +1,23 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import android.app.Activity
-import android.content.ContentValues
-import android.content.ContentValues.TAG
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.basicfirebase.databinding.FragmentSelectDestinationBinding
-import com.example.basicfirebase.search.Feature
+import com.example.dashit.databinding.FragmentSelectDestinationBinding
+import com.example.dashit.search.Feature
 import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.geojson.Point
-import com.mapbox.geojson.Point.fromLngLat
 import kotlinx.coroutines.*
 
 

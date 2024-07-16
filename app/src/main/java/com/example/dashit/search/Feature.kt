@@ -1,6 +1,4 @@
-package com.example.basicfirebase.search
-
-import android.os.Parcelable
+package com.example.dashit.search
 
 data class Feature (
     val bbox: List<Double>,

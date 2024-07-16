@@ -1,4 +1,4 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import org.junit.Test
 

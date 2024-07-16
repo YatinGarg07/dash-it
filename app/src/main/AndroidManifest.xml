@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.basicfirebase">
+    package="com.example.dashit">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -23,7 +23,7 @@
             android:value="@string/mapbox_access_token" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.dashit.LoginActivity"
             android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -32,25 +32,25 @@
         </intent-filter>
         </activity>
         <activity
-            android:name=".HomeScreen"
+            android:name="com.example.dashit.HomeScreen"
             android:exported="true"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"/>
 
         <activity
-            android:name=".MapsActivity"
+            android:name="com.example.dashit.MapsActivity"
             android:exported="true"
             android:label="@string/title_activity_maps"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".SecondActivity"
+            android:name="com.example.dashit.SecondActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.dashit.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.BasicFirebase.ForLoginActivity"/>
         <activity
-            android:name=".SignupActivity"
+            android:name="com.example.dashit.SignupActivity"
             android:exported="true" />
 
         <meta-data

@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "59853294402",
-    "project_id": "lazy-app-51fd6",
-    "storage_bucket": "lazy-app-51fd6.appspot.com"
+    "project_number": "922713408229",
+    "project_id": "dash-it-f5ffc",
+    "storage_bucket": "dash-it-f5ffc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:59853294402:android:554bfa5edd931886e0d6db",
+        "mobilesdk_app_id": "1:922713408229:android:a722c3564e183181b4ca0c",
         "android_client_info": {
-          "package_name": "com.example.basicfirebase"
+          "package_name": "com.example.dashit"
         }
       },
       "oauth_client": [
         {
-          "client_id": "59853294402-hc5l75fcbppom7916k8vruusnj2e9vd4.apps.googleusercontent.com",
+          "client_id": "922713408229-279h4j1n9no26m5fgqbuagt3a1hbtoi7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.basicfirebase",
+            "package_name": "com.example.dashit",
             "certificate_hash": "febcf4c22f079701bd2b861af140d575c83b3d8d"
           }
         },
         {
-          "client_id": "59853294402-oil92bnjqmtnor9nvq97pjmug2dl88c1.apps.googleusercontent.com",
+          "client_id": "922713408229-vkpa98kmueq5dtf99tcu8na080sf5i7o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDANwkF6XSuGdSPO36QrtncSLpmKdYmYD4"
+          "current_key": "AIzaSyBJ_8D6GR-z1larHdhfJ-IFF6gYoih-n0g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "59853294402-oil92bnjqmtnor9nvq97pjmug2dl88c1.apps.googleusercontent.com",
+              "client_id": "922713408229-vkpa98kmueq5dtf99tcu8na080sf5i7o.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,6 +1,6 @@
-package com.example.basicfirebase
+package com.example.dashit
 
-data class Destination(
+data class Source(
     val distance: Double,
     val location: List<Double>,
     val name: String

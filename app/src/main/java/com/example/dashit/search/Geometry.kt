@@ -1,4 +1,4 @@
-package com.example.basicfirebase.search
+package com.example.dashit.search
 
 data class Geometry(
     val coordinates: List<Double>,

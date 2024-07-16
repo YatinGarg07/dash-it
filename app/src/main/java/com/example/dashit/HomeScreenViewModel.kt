@@ -1,4 +1,4 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import android.app.Application
 import android.content.ContentValues
@@ -9,12 +9,9 @@ import androidx.lifecycle.*
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.basicfirebase.search.Feature
-import com.example.basicfirebase.search.SuggestionsList
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.firebase.auth.FirebaseAuth
+import com.example.dashit.search.Feature
+import com.example.dashit.search.SuggestionsList
 import com.google.gson.Gson
-import kotlinx.coroutines.*
 
 class HomeScreenViewModel(application: Application) : AndroidViewModel(application) {
 

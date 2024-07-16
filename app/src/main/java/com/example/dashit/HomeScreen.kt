@@ -1,21 +1,20 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.basicfirebase.databinding.ActivityHomeScreenBinding
-import com.example.basicfirebase.search.Feature
+import androidx.lifecycle.lifecycleScope
+import com.example.dashit.databinding.ActivityHomeScreenBinding
+import com.example.dashit.login.GoogleAuthUIClient
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.mapbox.geojson.Point
 //import com.mapbox.search.*
 //import com.mapbox.search.result.SearchSuggestion
 import kotlinx.coroutines.*
@@ -32,6 +31,13 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var autoCompleteTextObserver: Observer<String>
     private var pickUpCoordinates : List<Double>? = null
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUIClient(
+            context = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,11 +87,16 @@ class HomeScreen : AppCompatActivity() {
         }
 
         binding.signOutGoogleBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            GoogleSignIn.getClient(
-                this,
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-            ).signOut()
+//            FirebaseAuth.getInstance().signOut()
+//
+//            GoogleSignIn.getClient(
+//                this,
+//                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+//            ).signOut()
+            lifecycleScope.launch {
+                googleAuthUiClient.signOut()
+                Toast.makeText(applicationContext,"Signed out", Toast.LENGTH_LONG).show()
+            }
 
             finish()
 

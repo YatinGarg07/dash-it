@@ -1,9 +1,9 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import com.example.basicfirebase.databinding.ActivityNewSignupLayoutBinding
+import com.example.dashit.databinding.ActivityNewSignupLayoutBinding
 
 class SignupActivity : AppCompatActivity() {
     private  lateinit var binding : ActivityNewSignupLayoutBinding

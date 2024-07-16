@@ -1,15 +1,12 @@
-package com.example.basicfirebase
+package com.example.dashit
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.RadioButton
-import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.example.basicfirebase.databinding.ActivitySecondBinding
+import com.example.dashit.databinding.ActivitySecondBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

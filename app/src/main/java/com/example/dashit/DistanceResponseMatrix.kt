@@ -1,4 +1,4 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 data class DistanceResponseMatrix(
     val code: String,

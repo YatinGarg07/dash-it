@@ -5,7 +5,7 @@
     <data>
         <variable
             name="mainViewModel"
-            type="com.example.basicfirebase.RideOptionsFragmentViewModel" />
+            type="com.example.dashit.RideOptionsFragmentViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"

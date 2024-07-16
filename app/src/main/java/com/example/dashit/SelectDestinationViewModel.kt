@@ -1,4 +1,4 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import android.app.Application
 import android.content.ContentValues
@@ -6,15 +6,12 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.basicfirebase.search.Feature
-import com.example.basicfirebase.search.SuggestionsList
+import com.example.dashit.search.Feature
+import com.example.dashit.search.SuggestionsList
 import com.google.gson.Gson
-import com.mapbox.geojson.Point
-import kotlinx.coroutines.*
 
 class SelectDestinationViewModel(application: Application) : AndroidViewModel(application) {
     private lateinit var upAdapter : ArrayAdapter<String>

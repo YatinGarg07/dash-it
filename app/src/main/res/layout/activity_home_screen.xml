@@ -6,7 +6,7 @@
     <data>
         <variable
             name="mainViewModel"
-            type="com.example.basicfirebase.HomeScreenViewModel" />
+            type="com.example.dashit.HomeScreenViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

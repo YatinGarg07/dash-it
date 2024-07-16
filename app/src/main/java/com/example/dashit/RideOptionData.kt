@@ -1,6 +1,4 @@
-package com.example.basicfirebase
-
-import java.time.Duration
+package com.example.dashit
 
 class RideOptionData(img: String, title: String, duration: String, multiplier: Float, price : Int = 0) {
    val imageURL : String = img

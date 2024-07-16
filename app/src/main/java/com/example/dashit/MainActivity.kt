@@ -1,4 +1,4 @@
-package com.example.basicfirebase
+package com.example.dashit
 
 import android.app.Activity
 import android.content.ContentValues.TAG
@@ -10,7 +10,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.example.basicfirebase.databinding.ActivityMainBinding
+import com.example.dashit.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
