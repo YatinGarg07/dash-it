@@ -15,7 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.dashit.databinding.FragmentSelectDestinationBinding
+import com.example.dashit.login.GoogleAuthUIClient
 import com.example.dashit.search.Feature
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.mapbox.geojson.Point
 import kotlinx.coroutines.*
@@ -34,7 +36,12 @@ class SelectDestinationFragment : Fragment() {
     private lateinit var navController : NavController
     private var dropOffCoordinates : Point?  = null
     private lateinit var listener : OnCallBackRecieved
-    private lateinit var auth: FirebaseAuth
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUIClient.getInstance(
+            context = requireActivity().applicationContext,
+            oneTapClient = Identity.getSignInClient(requireActivity().applicationContext)
+        )
+    }
     private var latLong : List<Double>? = null
     private var suggestionList : ArrayList<String>? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,7 +110,7 @@ class SelectDestinationFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_select_destination,container,false)
         viewModel = ViewModelProvider(this)[SelectDestinationViewModel::class.java]
-        auth= FirebaseAuth.getInstance()
+//        auth= FirebaseAuth.getInstance()
         binding.model=viewModel
         binding.lifecycleOwner=this
 
@@ -147,8 +154,9 @@ class SelectDestinationFragment : Fragment() {
 
         viewModel.whereToEditText.observe(this.viewLifecycleOwner,autoCompleteTextObserver)
 
+        val user = if (googleAuthUiClient.getSignedInUser() == null) "Guest" else googleAuthUiClient.getSignedInUser()!!.displayName
 
-        binding.greetings.text = "Good Morning, ${auth.currentUser?.displayName}"
+        binding.greetings.text = "Good Morning, $user"
         // Inflate the layout for this fragment
 
         binding.navFavouriteHome.setOnClickListener {

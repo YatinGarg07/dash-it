@@ -14,19 +14,20 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 
-class GoogleAuthUIClient (
+class GoogleAuthUIClient private constructor(
     val context:Context,
      val oneTapClient: SignInClient
 ) {
-//    companion object {
-//
-//        @Volatile private var instance: GoogleAuthUIClient? = null // Volatile modifier is necessary
-//
-//        fun getInstance() =
-//            instance ?: synchronized(this) { // synchronized to avoid concurrency problem
-//                instance ?: GoogleAuthUIClient(context, oneTapClient = ).also { instance = it }
-//            }
-//    }
+    companion object {
+
+        @Volatile private var instance: GoogleAuthUIClient? = null // Volatile modifier is necessary
+
+        fun getInstance(context:Context,
+                        oneTapClient: SignInClient) =
+            instance ?: synchronized(this) { // synchronized to avoid concurrency problem
+                instance ?: GoogleAuthUIClient(context = context, oneTapClient = oneTapClient).also { instance = it }
+            }
+    }
 
     private val auth = Firebase.auth
 

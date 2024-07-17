@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private val googleAuthUiClient by lazy {
-        GoogleAuthUIClient(
+        GoogleAuthUIClient.getInstance(
             context = applicationContext,
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
@@ -144,7 +144,13 @@ class LoginActivity : AppCompatActivity() {
             signIn()
         }
 
+        binding.signInGuestBtn.setOnClickListener {
+            updateUI(null)
+        }
+
         binding.signInGoogleBtn.background.alpha = 255
+
+        binding.signInGuestBtn.background.alpha = 255
         
        lifecycleScope.launch {
            repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -169,7 +175,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    private fun updateUI(user: FirebaseUser) {
+    private fun updateUI(user: FirebaseUser?) {
         val intent = Intent(this,HomeScreen::class.java)
         Log.d("Login Activity", "Going to Home Screen")
 

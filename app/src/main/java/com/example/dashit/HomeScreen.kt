@@ -33,7 +33,7 @@ class HomeScreen : AppCompatActivity() {
     private var pickUpCoordinates : List<Double>? = null
 
     private val googleAuthUiClient by lazy {
-        GoogleAuthUIClient(
+        GoogleAuthUIClient.getInstance(
             context = applicationContext,
             oneTapClient = Identity.getSignInClient(applicationContext)
         )
@@ -94,7 +94,7 @@ class HomeScreen : AppCompatActivity() {
 //                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
 //            ).signOut()
             lifecycleScope.launch {
-                googleAuthUiClient.signOut()
+                if(googleAuthUiClient.getSignedInUser() != null) googleAuthUiClient.signOut()
                 Toast.makeText(applicationContext,"Signed out", Toast.LENGTH_LONG).show()
             }
 
