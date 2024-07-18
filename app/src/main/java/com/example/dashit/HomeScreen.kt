@@ -43,7 +43,7 @@ class HomeScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //initializing
         viewModel = ViewModelProvider(this)[HomeScreenViewModel::class.java]
-        //searchEngine = MapboxSearchSdk.getSearchEngine()
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home_screen)
         binding.mainViewModel = viewModel
         binding.lifecycleOwner = this
@@ -111,6 +111,10 @@ class HomeScreen : AppCompatActivity() {
             Toast.makeText(this, "Please enter the destination", Toast.LENGTH_SHORT).show()
         }
 
+        binding.linearLayoutGetFood.setOnClickListener {
+            Toast.makeText(this,"Coming Soon...", Toast.LENGTH_LONG).show()
+        }
+
         binding.navFavouriteHome.setOnClickListener {
             val hardCodedHomeLatLong = listOf(76.76808874924124, 30.696438087505946)
             pickUpCoordinates = hardCodedHomeLatLong
@@ -128,7 +132,7 @@ class HomeScreen : AppCompatActivity() {
 
     }
 
-    suspend fun networkCallForSuggestion(text: String){
+    private suspend fun networkCallForSuggestion(text: String){
         val job = CoroutineScope(Dispatchers.IO).launch{
             val url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$text.json?access_token=${
                 getString(R.string.mapbox_access_token)

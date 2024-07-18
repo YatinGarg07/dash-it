@@ -19,7 +19,7 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     private var suggestionsArray: ArrayList<String> = ArrayList()
     private lateinit var upAdapter : ArrayAdapter<String>
 
-     val whereFromEditText : MutableLiveData<String> by lazy {
+    val whereFromEditText : MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 

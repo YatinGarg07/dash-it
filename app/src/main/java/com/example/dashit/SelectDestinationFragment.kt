@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -64,6 +65,10 @@ class SelectDestinationFragment : Fragment() {
 
             binding.autocompleteTextView.onEditorAction(EditorInfo.IME_ACTION_DONE)
 
+        }
+
+        binding.eatsButton.setOnClickListener{
+            Toast.makeText(requireContext().applicationContext,"Coming Soon...", Toast.LENGTH_LONG).show()
         }
         viewModel.suggestionsList.observe(viewLifecycleOwner, Observer {
             displaySuggestions(it)
